@@ -13,7 +13,8 @@ class RegisterForm(FlaskForm):
     """docstring for RegistrationForm."""
     username = TextField(
         'username',
-        validators=[DataRequired(), Length(min=3, max=25)]
+        validators=[DataRequired(), Length(min=3, max=25)],
+        class_='form-control'
     )
     email = TextField(
         'email',

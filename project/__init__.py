@@ -7,7 +7,6 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import os
 
-
 ########################
 #        config        #
 ########################
@@ -23,5 +22,13 @@ from project.home.views import home_blueprint
 
 # register our blueprints
 app.register_blueprint(users_blueprint)
-# app.register_blueprint(blog_blueprint)
 app.register_blueprint(home_blueprint)
+
+from models import User
+
+login_manager.login_view = "users.login"
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter(User.id == int(user_id)).first()
