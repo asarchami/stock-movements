@@ -14,7 +14,6 @@ class RegisterForm(FlaskForm):
     username = TextField(
         'username',
         validators=[DataRequired(), Length(min=3, max=25)],
-        class_='form-control'
     )
     email = TextField(
         'email',
