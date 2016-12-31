@@ -3,10 +3,10 @@
 #        imports       #
 ########################
 from project import db  # pragma: no cover
-from project.models import BlogPost, Portfolio  # pragma: no cover
+from project.models import BlogPost, Portfolio, Symbol  # pragma: no cover
 from forms import MessageForm, PortfolioForm  # pragma: no cover
 from flask import render_template, Blueprint, flash, url_for, \
-    redirect, request  # pragma: no cover
+    redirect, request, jsonify  # pragma: no cover
 from flask_login import login_required, current_user  # pragma: no cover
 
 ##########################
@@ -70,7 +70,23 @@ def portfolios():
         flash('New portfolio created')
         return redirect(url_for('home.portfolios'))
     else:
-        portfolios = db.session.query(Portfolio).all()
+        # portfolios = db.session.query(Portfolio).all()
+        portfolios = Portfolio.query.filter_by(owner_id=current_user.id)
         return render_template(
             'portfolios.html', portfolios=portfolios, form=form, error=error
         )
+
+
+@home_blueprint.route('/symbols')
+@login_required
+def symbols():
+    """Json for symbols."""
+    return render_template('symbols.html')
+
+
+@home_blueprint.route('/symbols_json')
+@login_required
+def symbols_json():
+    """Json for symbols."""
+    symbols = Symbol.query.all()
+    return jsonify(symbols_list=[symbol.serialize for symbol in symbols])

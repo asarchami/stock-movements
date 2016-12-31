@@ -83,3 +83,53 @@ class Portfolio(db.Model):
     def __repr__(self):
         """Portfolio representation."""
         return '<name: {}>'.format(self.name)
+
+
+class Symbol(db.Model):
+    """Stock model."""
+
+    __tablename__ = 'symbols'
+
+    id = db.Column(db.Integer, primary_key=True)
+    symbol = db.Column(db.String, nullable=False)
+    name = db.Column(db.String, nullable=False)
+    sector = db.Column(db.String, nullable=False)
+    industry = db.Column(db.String, nullable=False)
+    address = db.Column(db.String, nullable=False)
+    date_added = db.Column(db.DateTime)
+    cik = db.Column(db.Integer, nullable=False)
+
+    def __init__(self, symbol, name, sector, industry,
+                 address, date_added, cik):
+        """Stock constructor."""
+        self.symbol = symbol
+        self.name = name
+        self.sector = sector
+        self.industry = industry
+        self.address = address
+        self.date_added = date_added
+        self.cik = cik
+
+    def __repr__(self):
+        """Stock representation."""
+        return '<name: {}>'.format(self.name)
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializable format."""
+        return {
+            'symbol': self.symbol,
+            'name': self.name,
+            'sector': self.sector,
+            'industry': self.industry,
+            'address': self.address,
+            # 'date_added': self.date_added,
+            'cik': self.cik
+        }
+    # @property
+    # def serialize_many2many(self):
+    #     """
+    #    Return object's relations in easily serializeable format.
+    #    NB! Calls many2many's serialize property.
+    #    """
+    #    return[item.serialize for item in self.many2many]
