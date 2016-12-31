@@ -1,7 +1,8 @@
-from project import db  # pragma: no cover
-from project import bcrypt  # pragma: no cover
+""" models.py """
 from sqlalchemy import ForeignKey  # pragma: no cover
 from sqlalchemy.orm import relationship  # pragma: no cover
+from project import db  # pragma: no cover
+from project import bcrypt  # pragma: no cover
 
 
 class BlogPost(db.Model):
@@ -38,15 +39,19 @@ class User(db.Model):
     # favorite_color = db.Column(db.String)
 
     def is_authenticated(self):
+        """ is_authenticated """
         return True
 
     def is_active(self):
+        """ is_active """
         return True
 
     def is_anonymous(self):
+        """ is_anonymous """
         return False
 
     def get_id(self):
+        """ get_id """
         return unicode(self.id)
 
     def __init__(self, name, email, password):
