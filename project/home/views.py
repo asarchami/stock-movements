@@ -1,9 +1,10 @@
+"""Default view."""
 ########################
 #        imports       #
 ########################
-from project import app, db  # pragma: no cover
-from project.models import BlogPost  # pragma: no cover
-from forms import MessageForm  # pragma: no cover
+from project import db  # pragma: no cover
+from project.models import BlogPost, Portfolio  # pragma: no cover
+from forms import MessageForm, PortfolioForm  # pragma: no cover
 from flask import render_template, Blueprint, flash, url_for, \
     redirect, request  # pragma: no cover
 from flask_login import login_required, current_user  # pragma: no cover
@@ -26,6 +27,7 @@ home_blueprint = Blueprint(
 @home_blueprint.route('/', methods=['GET', 'POST'])
 @login_required
 def home():
+    """Home Page."""
     error = None
     form = MessageForm(request.form)
     if form.validate_on_submit():
@@ -47,4 +49,28 @@ def home():
 
 @home_blueprint.route('/welcome')
 def welcome():
+    """Welcome page."""
     return render_template('welcome.html')
+
+
+@home_blueprint.route('/portfolios', methods=['GET', 'POST'])
+@login_required
+def portfolios():
+    """Portfolios."""
+    error = None
+    form = PortfolioForm(request.form)
+    if form.validate_on_submit():
+        new_portfolio = Portfolio(
+            form.name.data,
+            form.description.data,
+            current_user.id
+        )
+        db.session.add(new_portfolio)
+        db.session.commit()
+        flash('New portfolio created')
+        return redirect(url_for('home.portfolios'))
+    else:
+        portfolios = db.session.query(Portfolio).all()
+        return render_template(
+            'portfolios.html', portfolios=portfolios, form=form, error=error
+        )
