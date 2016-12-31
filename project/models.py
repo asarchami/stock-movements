@@ -64,6 +64,22 @@ class User(db.Model):
         return '<name: {}>'.format(self.name)
 
 
+class PortfolioSymbols(db.Model):
+    """Portfolio to Symbol Relationship."""
+
+    __tablename__ = 'portfolio_symbols'
+    id = db.Column(db.Integer, primary_key=True)
+    portfolio_id = db.Column(db.Integer,
+                             db.ForeignKey('portfolios.id'),
+                             nullable=False)
+    symbol_id = db.Column(db.Integer,
+                          db.ForeignKey('symbols.id'),
+                          nullable=False)
+    price = db.Column(db.Float)
+    date = db.Column(db.DateTime)
+    symbol = relationship('Symbol', backref='portfo_assoc')
+
+
 class Portfolio(db.Model):
     """Portfolio model."""
 
@@ -73,6 +89,7 @@ class Portfolio(db.Model):
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
     owner_id = db.Column(db.Integer, ForeignKey('users.id'))
+    symbols = relationship('PortfolioSymbols', backref='portfolio')
 
     def __init__(self, name, description, owner_id):
         """Portfolio constructor."""

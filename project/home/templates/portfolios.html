@@ -56,6 +56,11 @@
         </div>
         <div class="panel-body">
           <p>{{ portfolio.description }}</p>
+          {% for symbol in portfolio.symbols %}
+              {{ symbol.symbol.name }}
+              {{ symbol.price }}
+          {% endfor %}
+
         </div>
         <div class="panel-footer">
           <button type="button" class="btn btn-outline btn-default btn-xs">Edit</button>

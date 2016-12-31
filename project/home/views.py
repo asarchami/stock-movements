@@ -77,6 +77,31 @@ def portfolios():
         )
 
 
+@home_blueprint.route('/portfolios/<int:portfolio_id>',
+                      methods=['GET', 'POST'])
+@login_required
+def show_portfolio(portfolio_id):
+    """Show portfolio."""
+    error = None
+    form = PortfolioForm(request.form)
+    if form.validate_on_submit():
+        new_portfolio = Portfolio(
+            form.name.data,
+            form.description.data,
+            current_user.id
+        )
+        db.session.add(new_portfolio)
+        db.session.commit()
+        flash('New portfolio created')
+        return redirect(url_for('home.portfolios'))
+    else:
+        # portfolios = db.session.query(Portfolio).all()
+        portfolios = Portfolio.query.filter_by(owner_id=current_user.id)
+        return render_template(
+            'portfolios.html', portfolios=portfolios, form=form, error=error
+        )
+
+
 @home_blueprint.route('/symbols')
 @login_required
 def symbols():
