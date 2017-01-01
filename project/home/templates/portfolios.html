@@ -52,7 +52,7 @@
     <div class="col-lg-4">
       <div class="panel panel-default">
         <div class="panel-heading">
-          {{ portfolio.name }}
+          <a href="{{ url_for('home.show_portfolio', portfolio_id=portfolio.id) }}">{{ portfolio.name }}</a>
         </div>
         <div class="panel-body">
           <p>{{ portfolio.description }}</p>

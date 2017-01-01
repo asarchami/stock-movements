@@ -6,19 +6,21 @@
   <title>Stock Movements</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
 
     <!-- MetisMenu CSS -->
-    <link href="static/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/metisMenu/metisMenu.min.css') }}">
 
     <!-- Custom CSS -->
-    <link href="static/css/sb-admin-2.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/sb-admin-2.css') }}">
 
     <!-- Morris Charts CSS -->
-    <link href="static/vendor/morrisjs/morris.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/morrisjs/morris.css') }}">
 
     <!-- Custom Fonts -->
-    <link href="static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-select/css/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -62,20 +64,16 @@
     </div>
   </div>
   <!-- jQuery -->
-  <script src="static/vendor/jquery/jquery.min.js"></script>
+  <script src="{{ url_for('static', filename='vendor/jquery/jquery.min.js') }}"></script>
 
   <!-- Bootstrap Core JavaScript -->
-  <script src="static/vendor/bootstrap/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.min.js') }}"></script>
 
   <!-- Metis Menu Plugin JavaScript -->
-  <script src="static/vendor/metisMenu/metisMenu.min.js"></script>
+  <script src="{{ url_for('static', filename='vendor/metisMenu/metisMenu.min.js') }}"></script>
 
-  <!-- DataTables JavaScript -->
-  <script src="static/vendor/datatables/js/jquery.dataTables.min.js"></script>
-  <script src="static/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
-  <script src="static/vendor/datatables-responsive/dataTables.responsive.js"></script>
   <!-- Custom Theme JavaScript -->
-  <script src="static/js/sb-admin-2.js"></script>
+  <script src="{{ url_for('static', filename='js/sb-admin-2.js') }}"></script>
   {% block scripts %}{% endblock %}
 </body>
 </html>

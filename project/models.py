@@ -75,9 +75,23 @@ class PortfolioSymbols(db.Model):
     symbol_id = db.Column(db.Integer,
                           db.ForeignKey('symbols.id'),
                           nullable=False)
-    price = db.Column(db.Float)
+    price = db.Column(db.Float, nullable=False)
+    number = db.Column(db.Integer, nullable=False)
     date = db.Column(db.DateTime)
     symbol = relationship('Symbol', backref='portfo_assoc')
+
+    def __init__(self, number, price, date):
+        """Portfolio constructor."""
+        self.number = number
+        self.price = price
+        self.date = date
+        # self.portfolio_id = portfolio_id
+        # self.symbol_id = symbol_id
+
+    def __repr__(self):
+        """Portfolio representation."""
+        return '<portfolio: {} - symbol: {}>'.format(
+            self.portfolio_id, self.symbol_id)
 
 
 class Portfolio(db.Model):
@@ -89,7 +103,7 @@ class Portfolio(db.Model):
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
     owner_id = db.Column(db.Integer, ForeignKey('users.id'))
-    symbols = relationship('PortfolioSymbols', backref='portfolio')
+    portfo_symbols = relationship('PortfolioSymbols', backref='portfolio')
 
     def __init__(self, name, description, owner_id):
         """Portfolio constructor."""

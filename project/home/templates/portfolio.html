@@ -1,0 +1,117 @@
+
+{% extends 'base.html' %}
+{% block page_title %}{{ portfolio.name }}{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-12">
+    <h1 class="page-header">Stocks in Portfolios</h1>
+  </div>
+  <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+  <form class="form-signin" role="form" action="" method="post">
+    {{ form.csrf_token }}
+    <div class="form-group">
+      <div class="col-lg-3">
+        {{ form.symbol(class_='selectpicker show-tick form-control',
+        **{'data-live-search':"true", 'data-live-search-style':"begins"}) }}
+      </div>
+    </div>
+    <div class="form-group{{ ' has-error' if form.number.errors else '' }}">
+      <div class="col-lg-2">
+        {{ form.number(placeholder='Number of shares', class_='form-control') }}
+        <span class="error">
+          {% if form.number.errors %}
+          {% for error in form.number.errors %}
+          <label class="control-label" for="number">{{ error }}</label>
+          {% endfor %}
+          {% endif %}
+        </span>
+      </div>
+    </div>
+    <div class="form-group{{ ' has-error' if form.price.errors else '' }}">
+      <div class="col-lg-2">
+        {{ form.price(placeholder='Price', class_='form-control') }}
+        <span class="error">
+          {% if form.price.errors %}
+          {% for error in form.price.errors %}
+          <label class="control-label" for="price">{{ error }}</label>
+          {% endfor %}
+          {% endif %}
+        </span>
+      </div>
+    </div>
+    <div class="form-group{{ ' has-error' if form.date.errors else '' }}">
+      <div class="col-lg-2">
+        <div class="input-group date">
+          {{ form.date(placehoder='Date', class_='form-control') }}
+          <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+        </div>
+        <span class="error">
+          {% if form.date.errors %}
+          {% for error in form.date.errors %}
+          <label class="control-label" for="date">{{ error }}</label>
+          {% endfor %}
+          {% endif %}
+        </span>
+      </div>
+    </div>
+    <div class="col-lg-1">
+      <button class="btn btn-success btn-block" type="submit">Add!</button>
+    </div>
+  </form>
+</div>
+<br>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        {{ portfolio.description }}
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Name</th>
+                <th>Number of Shares</th>
+                <th>Purchase Price</th>
+                <th>Purchase Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for assoc in portfolio.portfo_symbols %}
+              <tr>
+                <td>{{ assoc.symbol.symbol }}</td>
+                <td>{{ assoc.symbol.name }}</td>
+                <td>{{ assoc.number }}</td>
+                <td>{{ assoc.price }}</td>
+                <td>{{ assoc.date }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <!-- /.table-responsive -->
+      </div>
+      <!-- /.panel-body -->
+    </div>
+    <!-- /.panel -->
+  </div>
+</div>
+{% endblock %}
+
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='vendor/bootstrap-select/js/bootstrap-select.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+<script>
+$('.input-group.date').datepicker({
+  todayBtn: "linked",
+  autoclose: true,
+  todayHighlight: true
+});
+</script>
+{% endblock %}
