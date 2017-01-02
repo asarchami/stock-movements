@@ -1,3 +1,4 @@
+"""Users view."""
 ##########################
 #         imports        #
 ##########################
@@ -6,7 +7,6 @@ from flask import flash, redirect, render_template, request, \
     url_for, Blueprint  # pragma: no cover
 from flask_login import login_user, login_required, \
     logout_user  # pragma: no cover
-from functools import wraps  # pragma: no cover
 from form import LoginForm, RegisterForm  # pragma: no cover
 from project import db  # pragma: no cover
 from project.models import User, bcrypt  # pragma: no cover
@@ -28,6 +28,7 @@ users_blueprint = Blueprint(
 # route for handling the login page logic
 @users_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    """Login."""
     error = None
     form = LoginForm(request.form)
     if request.method == 'POST':
@@ -48,6 +49,7 @@ def login():
 @users_blueprint.route('/logout')
 @login_required
 def logout():
+    """Logout."""
     logout_user()
     flash('You were just logged out!')
     return redirect(url_for('home.welcome'))
@@ -55,6 +57,7 @@ def logout():
 
 @users_blueprint.route('/register', methods=['GET', 'POST'])
 def register():
+    """Register."""
     form = RegisterForm()
     if form.validate_on_submit():
         user = User(
