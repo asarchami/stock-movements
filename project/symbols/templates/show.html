@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% block page_title %}{{ symbol }}{% endblock %}
+{% block content %}
+<div class="col-lg-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Close Prices
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+      <div id="example-section32">
+        <div id="detailContainer" style="width: 100%;height:400px;margin-top:10px; text-align: left;"></div>
+        <div id="masterContainer" style="width: 100%;height:200px;margin-top:10px;"></div>
+      </div>
+    </div>
+    <!-- /.panel-body -->
+  </div>
+  <!-- /.panel -->
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+<!-- Flot Charts JavaScript -->
+<script src="{{ url_for('static', filename='vendor/flot/excanvas.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/flot/jquery.flot.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/flot/jquery.flot.resize.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/flot/jquery.flot.time.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/flot/jquery.flot.selection.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/flot-tooltip/jquery.flot.tooltip.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sb-admin-2.js') }}"></script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+
+  // Assign handlers immediately after making the request,
+  // and remember the jqxhr object for this request
+  var jqxhr = $.getJSON(
+      "{{ url_for('static', filename='datasets/news_quotes/{}.json'.format(symbol)) }}",
+      function() {
+        // console.log( "success" );
+      })
+    .done(function(data) {
+      // console.log( data.Date );
+      var dates = [];
+      $.each(data.Date, function(key, val) {
+        var myDate = val;
+        myDate = myDate.split("-");
+        var newDate = myDate[1] + "/" + myDate[2] + "/" + myDate[0];
+        dates.push(new Date(newDate).getTime())
+      });
+      // console.log(dates);
+
+      var close_prices = [];
+      $.each(data.Close, function(key, val) {
+        close_prices.push(val)
+      });
+      for (var i = 0; i < close_prices.length; i++) {
+        close_prices[i] = [dates[i], close_prices[i]]
+      };
+      var detailOptions = {
+        series: {
+          lines: {
+            show: true,
+            lineWidth: 3
+          },
+          shadowSize: 0
+        },
+        grid: {
+          hoverable: true,
+          // backgroundColor: { colors: ["#96CBFF", "#75BAFF"] }
+        },
+        yaxis: {
+          // color:"#8400FF"
+        },
+        xaxis: {
+          mode: "time",
+          // color:"#8400FF"
+        },
+        selection: {
+          mode: "x"
+        },
+        grid: {
+          hoverable: true //IMPORTANT! this is needed for tooltip to work
+        },
+        tooltip: true,
+        tooltipOpts: {
+          content: "%s for %x was %y",
+          xDateFormat: "%m-%d-%Y",
+
+          onHover: function(flotItem, $tooltipEl) {
+            // console.log(flotItem, $tooltipEl);
+          }
+        }
+      };
+
+      var masterOptions = {
+        series: {
+          lines: {
+            show: true,
+            lineWidth: 3
+          },
+          shadowSize: 0
+        },
+        grid: {
+          // backgroundColor: { colors: ["#96CBFF", "#75BAFF"] }
+        },
+        yaxis: {
+          // color:"#FAF9CF"
+        },
+        xaxis: {
+          mode: "time",
+          // color:"#8400FF"
+        },
+        selection: {
+          mode: "x"
+        }
+      };
+
+      var dataDetail = [{
+        label: "Close Price",
+        data: close_prices,
+        // color:"#FF7575"
+      }];
+
+      var plotDetail = $.plot($("#example-section32 #detailContainer"),
+        dataDetail,
+        detailOptions
+      );
+
+      var plotMaster = $.plot(
+        $("#example-section32 #masterContainer"), [{
+          data: close_prices,
+          color: "#FF7575"
+        }],
+        masterOptions
+      );
+
+      $("#example-section32 #detailContainer").bind(
+        "plotselected",
+        function(event, ranges) {
+          plotDetail = $.plot(
+            $("#example-section32 #detailContainer"),
+            dataDetail,
+            $.extend(true, {}, detailOptions, {
+              xaxis: {
+                min: ranges.xaxis.from,
+                max: ranges.xaxis.to
+              }
+            })
+          );
+          plotMaster.setSelection(ranges, true);
+        }
+      );
+
+      $("#example-section32 #masterContainer").bind(
+        "plotselected",
+        function(event, ranges) {
+          plotDetail.setSelection(ranges);
+        }
+      );
+
+    })
+    .fail(function() {
+      console.log("error");
+    })
+});
+</script>
+
+
+{% endblock %}
