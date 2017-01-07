@@ -6,6 +6,9 @@ from project.models import Symbol  # pragma: no cover
 from flask import render_template, Blueprint, jsonify, \
     url_for  # pragma: no cover
 from flask_login import login_required  # pragma: no cover
+
+from bokeh.plotting import figure
+from bokeh.embed import components
 # import os  # pragma: no cover
 
 ##########################
@@ -51,3 +54,10 @@ def symbol_show(symbol):
     # return jsonify(symb=[d.serialize for d in data])
     # return "<a href=%s>file</a>" % url_for('static', filename='datasets/news_quotes/A.json')
     return render_template('show.html', symbol=symbol)
+
+
+# @symbols_blueprint.route('/symbol/<symbol>')
+# @login_required
+# def symbol_show(symbol):
+#     """Show symbol info."""
+#     return render_template('view.html', symbol=symbol)

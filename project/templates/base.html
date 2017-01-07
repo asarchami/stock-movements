@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/morrisjs/morris.css') }}">
 
     <!-- Custom Fonts -->
+    {% block stylesheets %}{% endblock %}
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/font-awesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-select/css/bootstrap-select.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css') }}">
