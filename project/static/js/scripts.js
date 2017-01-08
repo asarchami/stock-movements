@@ -16,7 +16,8 @@ function load_plot(symbol) {
       var arr = Object.keys(data).map(function(k) {return data[k]})
       close = Object.keys(arr[2]).map(function(v) {return [toUTC(arr[0][v]), arr[2][v]]});
       compound = Object.keys(arr[7]).map(function(v) {return [toUTC(arr[0][v]), arr[7][v]]});
-      // console.log(compound);
+      neg = Object.keys(arr[8]).map(function(v) {return [toUTC(arr[0][v]), arr[8][v]]});
+      // console.log(neg);
 
       var detailOptions = {
         series: {
@@ -84,11 +85,12 @@ function load_plot(symbol) {
         },
         tooltip: true,
         tooltipOpts: {
+          // content: "%s for %x was %y",
           content: "%s for %x was %y",
           xDateFormat: "%m-%d-%Y",
 
           onHover: function(flotItem, $tooltipEl) {
-            // console.log(flotItem, $tooltipEl);
+            // console.log($tooltipEl);
           }
         }
       };
@@ -123,7 +125,7 @@ function load_plot(symbol) {
       }];
 
       var dataSent = [{
-        label: "Close Price",
+        label: "Compound sentiment score",
         data: compound,
         // color:"#FF7575"
       }];

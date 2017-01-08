@@ -9,6 +9,10 @@
     </div>
     <!-- /.panel-heading -->
     <div class="panel-body">
+      <div>
+        <p><h2>Symbol Info</h2></p>
+        {{ table|safe }}
+      </div>
       <div id="example-section32">
         <div id="detailContainer" style="width: 100%;height:400px;margin-top:10px; text-align: left;"></div>
         <div id="sentimentContainer" style="width: 100%;height:200px;margin-top:10px; text-align: left;"></div>
@@ -35,5 +39,16 @@
 <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 <script type="text/javascript">
   load_plot("{{ symbol }}")
+</script>
+
+<script src="{{ url_for('static', filename='vendor/datatables/js/jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/datatables-plugins/dataTables.bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/datatables-responsive/dataTables.responsive.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('.dataframe').DataTable({
+            responsive: true
+        });
+    });
 </script>
 {% endblock %}

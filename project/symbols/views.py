@@ -4,11 +4,13 @@
 ########################
 from project.models import Symbol  # pragma: no cover
 from flask import render_template, Blueprint, jsonify, \
-    url_for  # pragma: no cover
+    Response  # pragma: no cover
 from flask_login import login_required  # pragma: no cover
+from project.ml import ml as ml
+import json
+import os
+import pandas as pd
 
-from bokeh.plotting import figure
-from bokeh.embed import components
 # import os  # pragma: no cover
 
 ##########################
@@ -45,19 +47,37 @@ def symbols_json():
 @login_required
 def symbol_show(symbol):
     """Show symbol info."""
-    # SITE_ROOT = os.path.realpath(os.path.dirname(__file__))
-    # json_url = os.path.join(SITE_ROOT,
-    #                         'static/datasets/news_quotes',
-    #                         symbol, '.json')
-    # data = json.load(open(json_url))
-    # return render_template('show.html', data=data)
-    # return jsonify(symb=[d.serialize for d in data])
-    # return "<a href=%s>file</a>" % url_for('static', filename='datasets/news_quotes/A.json')
-    return render_template('show.html', symbol=symbol)
+    file_path = os.getcwd() + \
+        "/project/static/datasets/news_quotes/{}.json".format(symbol)
+    table = pd.read_json(
+        file_path).sort_values(by='Date', ascending=False).set_index('Date')
+    table = table[(table['compound'].notnull())]
+    table = table[['Open', 'Close', 'High', 'Low', 'Volume',
+                   'compound', 'neu', 'pos', 'neg',
+                   'Next_Close', 'Next_Open']]
+
+    table = table.to_html(
+        classes='table table-striped table-bordered table-hover')
+    return render_template('show.html', symbol=symbol, table=table)
 
 
-# @symbols_blueprint.route('/symbol/<symbol>')
+@symbols_blueprint.route("/Symbol/update/<symbol>")
+@login_required
+def symbol_update(symbol):
+    """Update symbol info."""
+    return render_template('update_symbol.html', symbol=symbol)
+
+
+@symbols_blueprint.route('/symbol/<symbol>.json')
 # @login_required
-# def symbol_show(symbol):
-#     """Show symbol info."""
-#     return render_template('view.html', symbol=symbol)
+def show_symbol_json(symbol):
+    """Json for symbols."""
+    file_path = os.getcwd() + \
+        "/project/static/datasets/news_quotes/{}.json".format(symbol)
+    with open(file_path) as data_file:
+        data = json.load(data_file)
+
+    resp = Response(json.dumps(data), status=200, mimetype='application/json')
+    # resp.headers['Link'] = ''
+
+    return resp

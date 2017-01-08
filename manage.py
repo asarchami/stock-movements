@@ -1,8 +1,8 @@
+"""Run the whole thing."""
 import os
 import unittest
 from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
-import os
 import coverage
 
 from project import app, db
@@ -16,14 +16,14 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def test():
-    """Runs the test without coverage"""
+    """Run the test without coverage."""
     tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=3).run(tests)
 
 
 @manager.command
 def cov():
-    """Runs the unit tests with coverage."""
+    """Run the unit tests with coverage."""
     cov = coverage.coverage(branch=True, include='project/*',
                             omit='*/__init__.py')
     cov.start()
@@ -36,6 +36,7 @@ def cov():
     basedir = os.path.abspath(os.path.dirname(__file__))
     covdir = os.path.join(basedir, 'coverage')
     cov.html_report(directory=covdir)
+
 
 if __name__ == '__main__':
     manager.run()
