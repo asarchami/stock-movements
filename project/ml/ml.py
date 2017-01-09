@@ -95,7 +95,7 @@ def update_data(symbol):
                'compound', 'neg', 'neu', 'pos', 'Next_Close', 'Next_Open',
                'Prev_Close', 'Prev_Slope', 'Next_Slope', 'Diff_Slope']]
     start_date = datetime.datetime.strptime(
-        sym.iloc[-1, :]['Date'], "%Y-%m-%d").date() + timedelta(days=1)
+        sym.iloc[-1, :]['Date'], "%Y-%m-%d").date()
     end_date = date.today()
     if start_date < end_date:
         start_date = start_date - timedelta(days=1)
@@ -108,8 +108,14 @@ def update_data(symbol):
             except (urllib2.URLError, IOError, httplib.HTTPException) as e:
                 print e.args
     #     data = pd.concat(data)
+        sentiments = [x for x in sentiments if x]
+        if len(sentiments) == 0:
+            sentiments = pd.DataFrame(columns=['Date', 'Symbol',
+                                               'compound', 'neg',
+                                               'neu', 'pos'])
+        else:
+            sentiments = pd.concat(sentiments)
 
-        sentiments = pd.concat(sentiments)
         sentiments = sentiments[['Date', 'Symbol', 'compound',
                                  'neg', 'neu', 'pos']]
 
@@ -147,6 +153,6 @@ def update_data(symbol):
         sym['Date'] = pd.to_datetime(sym['Date'], format='%Y-%m-%d')
         sym = sym.reset_index().drop('index', axis=1)
 #         return sym
-#         sym.to_csv('datasets/temp/{}.csv'.format(symbol),
-#                    encoding='utf-8')
+        sym.to_csv('datasets/temp/{}.csv'.format(symbol),
+                   encoding='utf-8')
     return sym

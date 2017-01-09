@@ -10,6 +10,7 @@ from project.ml import ml as ml
 import json
 import os
 import pandas as pd
+from sklearn.externals import joblib
 
 # import os  # pragma: no cover
 
@@ -47,14 +48,37 @@ def symbols_json():
 @login_required
 def symbol_show(symbol):
     """Show symbol info."""
+    symbol = Symbol.query.filter(symbol == symbol).first()
     file_path = os.getcwd() + \
-        "/project/static/datasets/news_quotes/{}.json".format(symbol)
+        "/project/static/datasets/news_quotes/{}.json".format(symbol.symbol)
     table = pd.read_json(
-        file_path).sort_values(by='Date', ascending=False).set_index('Date')
+        file_path).sort_values(by='Date', ascending=False)
     table = table[(table['compound'].notnull())]
+    # table = table[['Open', 'Close', 'High', 'Low', 'Volume',
+    #                'compound', 'neu', 'pos', 'neg',
+    #                'Next_Open', 'Next_Close']]
+
+    orig = table.copy()
+    file_path = os.getcwd() + "/project/static/datasets/models/all.sav"
+    all_dic = {}
+    if os.path.exists(file_path):
+        all_dic = joblib.load(file_path)
+    lr_model = all_dic['lr_model']
+    table = table[['Close', 'High', 'Low', 'Open', 'Volume', 'compound',
+                   'neg', 'neu', 'pos', 'Next_Open', 'Prev_Slope']]
+    pred = lr_model.predict(table)
+    table = table.reset_index()
+    table['pred_difference'] = pred[0]
+    table = table.set_index('index')
+    table['Next_Close'] = orig['Next_Close']
+    table['pred_N_Close'] = table['pred_difference'] + 2*table['Close'] - \
+        orig['Prev_Close']
+    table['Date'] = orig['Date']
+
+    table = table.set_index('Date')
     table = table[['Open', 'Close', 'High', 'Low', 'Volume',
                    'compound', 'neu', 'pos', 'neg',
-                   'Next_Close', 'Next_Open']]
+                   'Next_Close', 'pred_N_Close']]
 
     table = table.to_html(
         classes='table table-striped table-bordered table-hover')
