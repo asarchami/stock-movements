@@ -74,7 +74,7 @@ def show_portfolio(portfolio_id):
         print ps.symbol_id
         db.session.add(ps)
         db.session.commit()
-        return redirect(url_for('home.show_portfolio'))
+        return redirect(url_for('portfolios.show_portfolio', portfolio_id=portfolio.id))
     else:
         return render_template('portfolio.html',
                                portfolio=portfolio, form=form, error=error)

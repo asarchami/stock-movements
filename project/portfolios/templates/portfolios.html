@@ -47,28 +47,52 @@
   </div>
 
   <!-- /.row -->
-  <div class="row">
-    {% for portfolio in portfolios %}
-    <div class="col-lg-4">
-      <div class="panel panel-default">
-        <div class="panel-heading">
-          <a href="{{ url_for('portfolios.show_portfolio', portfolio_id=portfolio.id) }}">{{ portfolio.name }}</a>
-        </div>
-        <div class="panel-body">
-          <p>{{ portfolio.description }}</p>
-          {% for symbol in portfolio.symbols %}
-              {{ symbol.symbol.name }}
-              {{ symbol.price }}
-          {% endfor %}
+  <div class="masonry">
+    <div class="row">
+      {% for portfolio in portfolios %}
+      <div class="col-lg-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <b>
+              <a href="{{ url_for('portfolios.show_portfolio', portfolio_id=portfolio.id) }}">{{ portfolio.name }}</a>
+            </b>
+          </div>
+          <div class="panel-body">
+            <p>{{ portfolio.description }}</p>
+            {% if portfolio.portfo_symbols %}
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>Symbol</th>
+                    <th>Number of Shares</th>
+                    <th>Purchase Price</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for assoc in portfolio.portfo_symbols %}
+                  <tr>
+                    <td>{{ assoc.symbol.symbol }}</td>
+                    <td>{{ assoc.number }}</td>
+                    <td>{{ assoc.price }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
 
-        </div>
-        <div class="panel-footer">
-          <button type="button" class="btn btn-outline btn-default btn-xs">Edit</button>
-          <button type="button" class="btn btn-outline btn-default btn-xs">Add/Remove Stocks</button>
+          </div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-outline btn-default btn-xs">Edit</button>
+            <button type="button" class="btn btn-outline btn-default btn-xs">Add/Remove Stocks</button>
+          </div>
         </div>
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
+
 </div>
+
+
+
 {% endblock %}

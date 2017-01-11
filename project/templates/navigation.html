@@ -14,8 +14,8 @@
     {% if current_user.is_authenticated %}
       {% include "glimpse.html" %}
       {% include "alerts.html" %}
-      {% include "user.html" %}
     {% endif %}
+    {% include "user.html" %}
 
   </ul>
   <!-- /.navbar-top-links -->
@@ -27,7 +27,7 @@
           {% include "search.html" %}
 
         <li>
-          <a href="{{ url_for("home.home") }}"><i class="fa fa-files-o fa-fw"></i> Blog</span></a>
+          <a href="{{ url_for("blog.blogs") }}"><i class="fa fa-files-o fa-fw"></i> Blog</span></a>
           <!-- /.nav-second-level -->
         </li>
         <li>
