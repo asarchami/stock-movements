@@ -434,8 +434,8 @@ table.dataTable thead .sorting:after {
 }
 
 .masonry .row {
- -moz-column-width: 25em;
- -webkit-column-width: 25em;
+ -moz-column-width: 30em;
+ -webkit-column-width: 30em;
  -moz-column-gap: 1em;
  -webkit-column-gap:1em;
 
@@ -446,15 +446,4 @@ table.dataTable thead .sorting:after {
  padding:  .33rem;
  width:  100%;
  float:none;
-}
-.masonry .row > .col-md-4 {
- display: inline-block;
- padding:  .33rem;
- width:  100%;
- float:none;
-}
-
-.well {
- position:relative;
- display: block;
 }

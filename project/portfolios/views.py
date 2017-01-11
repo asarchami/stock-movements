@@ -25,9 +25,44 @@ portfolios_blueprint = Blueprint(
 # use decorators to link the function to a url
 
 
-@portfolios_blueprint.route('/portfolios', methods=['GET', 'POST'])
+# @portfolios_blueprint.route('/portfolios', methods=['GET', 'POST'])
+# @login_required
+# def portfolios():
+#     """Portfolios."""
+#     error = None
+#     form = PortfolioForm(request.form)
+#     if form.validate_on_submit():
+#         new_portfolio = Portfolio(
+#             form.name.data,
+#             form.description.data,
+#             current_user.id
+#         )
+#         db.session.add(new_portfolio)
+#         db.session.commit()
+#         flash('New portfolio created')
+#         return redirect(url_for('home.portfolios'))
+#     else:
+#         # portfolios = db.session.query(Portfolio).all()
+#         portfolios = Portfolio.query.filter_by(owner_id=current_user.id)
+#         return render_template(
+#             'portfolios.html', portfolios=portfolios, form=form, error=error
+#         )
+
+
+@portfolios_blueprint.route('/portfolios')
 @login_required
 def portfolios():
+    """Portfolios."""
+    # portfolios = db.session.query(Portfolio).all()
+    portfolios = Portfolio.query.filter_by(owner_id=current_user.id)
+    return render_template(
+        'portfolios.html', portfolios=portfolios
+    )
+
+
+@portfolios_blueprint.route('/new', methods=['GET', 'POST'])
+@login_required
+def new_portfolio():
     """Portfolios."""
     error = None
     form = PortfolioForm(request.form)
@@ -40,12 +75,12 @@ def portfolios():
         db.session.add(new_portfolio)
         db.session.commit()
         flash('New portfolio created')
-        return redirect(url_for('home.portfolios'))
+        return redirect(url_for('portfolios.portfolios'))
     else:
         # portfolios = db.session.query(Portfolio).all()
         portfolios = Portfolio.query.filter_by(owner_id=current_user.id)
         return render_template(
-            'portfolios.html', portfolios=portfolios, form=form, error=error
+            'new_portfolio.html', portfolios=portfolios, form=form, error=error
         )
 
 
@@ -74,7 +109,8 @@ def show_portfolio(portfolio_id):
         print ps.symbol_id
         db.session.add(ps)
         db.session.commit()
-        return redirect(url_for('portfolios.show_portfolio', portfolio_id=portfolio.id))
+        return redirect(url_for('portfolios.show_portfolio',
+                                portfolio_id=portfolio.id))
     else:
         return render_template('portfolio.html',
                                portfolio=portfolio, form=form, error=error)
