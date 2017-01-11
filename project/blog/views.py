@@ -4,7 +4,7 @@
 ########################
 from project import db  # pragma: no cover
 from project.models import BlogPost  # pragma: no cover
-from forms import MessageForm  # pragma: no cover
+from forms import BlogForm  # pragma: no cover
 from flask import render_template, Blueprint, flash, url_for, \
     redirect, request  # pragma: no cover
 from flask_login import login_required, current_user  # pragma: no cover
@@ -24,13 +24,22 @@ blog_blueprint = Blueprint(
 # use decorators to link the function to a url
 
 
-@blog_blueprint.route('/blogs', methods=['GET', 'POST'])
+@blog_blueprint.route('/blogs')
 @login_required
 def blogs():
     """Blog List."""
+    posts = db.session.query(BlogPost).all()
+    return render_template('blogs.html', posts=posts)
+
+
+@blog_blueprint.route('/blogs/new', methods=['GET', 'POST'])
+@login_required
+def new_blog():
+    """Blog List."""
     error = None
-    form = MessageForm(request.form)
+    form = BlogForm(request.form)
     if form.validate_on_submit():
+        print 'hi'
         new_message = BlogPost(
             form.title.data,
             form.description.data,
@@ -43,5 +52,5 @@ def blogs():
     else:
         posts = db.session.query(BlogPost).all()
         return render_template(
-            'blogs.html', posts=posts, form=form, error=error
+            'new_blog.html', posts=posts, form=form, error=error
         )

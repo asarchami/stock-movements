@@ -4,6 +4,7 @@
 Create a New Portfolio
 {% endblock %}
 {% block content %}
+{% from 'macros.html' import input %}
   <!-- post form -->
   <div class="row">
     <div class="col-md-4">
@@ -15,6 +16,8 @@ Create a New Portfolio
           <form class="form-signin" role="form" action="" method="post">
             <fieldset>
               {{ form.csrf_token }}
+              <!-- {{ input(form.name, 'name') }} -->
+
               <div class="form-group{{ ' has-error' if form.name.errors else '' }}">
                 {{ form.name(placeholder='name', class_='form-control') }}
                 <span class="error">

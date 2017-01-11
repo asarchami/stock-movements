@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block page_title %}Add a new Blog{% endblock %}
+{% block content %}
+{% from 'macros.html' import input %}
+<!-- post form -->
+<div class="col-lg-5">
+  <form action="" class="form-message" role="form" method="post">
+    {{ form.csrf_token }}
+    {{ input(form.title, 'Title') }}
+    {{ input(form.description, 'Description') }}
+    <button class="btn btn-sm btn-success" type="submit">Post!</button>
+  </form>
+</form>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% macro input(element, title) -%}
+    <p>
+      {{ element(placeholder=title, class_='form-control') }}
+      <span class="error">
+        {% if element.errors %}
+          {% for error in element.errors %}
+            {{ error }}
+          {% endfor %}
+        {% endif %}
+      </span>
+    </p>
+{%- endmacro %}

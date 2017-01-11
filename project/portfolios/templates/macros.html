@@ -1,0 +1,12 @@
+{% macro input(element, title) -%}
+  <div class="form-group{{ ' has-error' if element.errors else '' }}">
+    {{ element(placeholder=title, class_='form-control') }}
+    <span class="error">
+      {% if element.errors %}
+        {% for error in element.errors %}
+          <label class="control-label" for="{{ title }}">{{ error }}</label>
+        {% endfor %}
+      {% endif %}
+    </span>
+  </div>
+{%- endmacro %}

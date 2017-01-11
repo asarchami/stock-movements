@@ -1,36 +1,8 @@
 {% extends 'base.html' %}
-{% block page_title %}Blog{% endblock %}
+{% block page_title %}Blog
+<small><a href="{{ url_for('blog.new_blog') }}">New</a></small>
+{% endblock %}
 {% block content %}
-  <br />
-  <p>Click <a href="/logout">here</a> to logout.</p>
-  <!-- post form -->
-  <h3>Add a post!</h3>
-  <br>
-  <form action="/" class="form-message" role="form" method="post">
-    {{ form.csrf_token }}
-    <p>
-      {{ form.title(placeholder='title') }}
-      <span class="error">
-        {% if form.title.errors %}
-            {% for error in form.title.errors %}
-                {{ error }}
-            {% endfor %}
-        {% endif %}
-      </span>
-    </p>
-    <p>
-      {{ form.description(placeholder='description') }}
-      <span class="error">
-        {% if form.description.errors %}
-            {% for error in form.description.errors %}
-                {{ error }}
-            {% endfor %}
-        {% endif %}
-      </span>
-    </p>
-    <button class="btn btn-sm btn-success" type="submit">Post!</button>
-  </form>
-  <h1>Posts</h1>
   {% for post in posts %}
     <strong>Title:</strong> {{ post.title }} <br />
     <strong>Post:</strong> {{ post.description }} <br />
